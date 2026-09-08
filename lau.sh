@@ -10,8 +10,8 @@ read outdir
 mkdir -p $outdir ${outdir}1
 test -f $bookpath || echo "Input file not found" && false
 ./kindleunpack.py --epub_version=2 $bookpath ${outdir}1
-outfile=$(echo $bookpath|sed -e "s/azw3$/epub")
+outfile=$(basename $bookpath|sed -e "s/azw3$/epub/g")
 cp -a ${outdir}1/mobi8/$outfile $outdir
 cd $outdir
 rm -rf ${outdir1}
-echo "Savat fisierul epub in $outdir/$outfile
+echo "Savat fisierul epub in $outdir/$outfile"
