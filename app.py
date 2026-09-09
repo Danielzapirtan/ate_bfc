@@ -51,8 +51,8 @@ HTML_TEMPLATE = '''
             </div>
             
             <div class="form-group">
-                <label for="outdir">Output directory (optional, default: ./converted):</label>
-                <input type="text" name="outdir" id="outdir" placeholder="./converted" value="./converted">
+                <label for="outdir">Output directory (optional, default: /tmp/converted):</label>
+                <input type="text" name="outdir" id="outdir" placeholder="/tmp/converted" value="/tmp/converted">
             </div>
             
             <input type="submit" value="Convert to EPUB" id="submitBtn">
