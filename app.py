@@ -98,7 +98,7 @@ KINDLEUNPACK_PATH = None
 
 def download_kindleunpack():
     """Download KindleUnpack from GitHub as ZIP"""
-    repo_path = Path('KindleUnpack')
+    repo_path = Path('/tmp/KindleUnpack')
     
     if repo_path.exists():
         # Check if kindleunpack.py exists
