@@ -14,4 +14,4 @@ outfile=$(basename $bookpath|sed -e "s/azw3$/epub/g")
 cp -a ${outdir}1/mobi8/$outfile $outdir
 cd $outdir
 rm -rf ${outdir}1
-echo "Savat fisierul epub in $outdir/$outfile"
+echo "Salvat fisierul epub in $outdir/$outfile"
