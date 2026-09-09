@@ -179,9 +179,9 @@ def index():
     if request.method == 'POST':
         try:
             # Get output directory
-            outdir = request.form.get('outdir', './converted').strip()
-            if not outdir:
-                outdir = './converted'
+            #outdir = request.form.get('outdir', './converted').strip()
+            #if not outdir:
+            outdir = '/tmp/converted'
             
             # Create output directory
             outdir_path = Path(outdir).resolve()
