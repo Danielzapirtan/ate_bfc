@@ -338,7 +338,7 @@ if __name__ == '__main__':
     try:
         ensure_kindleunpack()
         print("✅ KindleUnpack initialized successfully")
-        print("🌐 Starting Flask server at http://localhost:5000")
+        print("🌐 Starting Flask server at http://localhost:5010")
     except Exception as e:
         print(f"❌ Failed to initialize KindleUnpack: {e}")
         print("Please ensure you have internet connection")
