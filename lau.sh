@@ -13,5 +13,5 @@ test -f $bookpath || echo "Input file not found" && false
 outfile=$(basename $bookpath|sed -e "s/azw3$/epub/g")
 cp -a ${outdir}1/mobi8/$outfile $outdir
 cd $outdir
-rm -rf ${outdir1}
+rm -rf ${outdir}1
 echo "Savat fisierul epub in $outdir/$outfile"
