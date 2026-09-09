@@ -181,10 +181,13 @@ def index():
             # Get output directory
             outdir = request.form.get('outdir', '/tmp/converted').strip()
             if not outdir:
-                outdir = './converted'
+                outdir = '/tmp/converted'
             
             # Create output directory
-            outdir_path = Path(outdir).resolve()
+            outdir_path = Path(outdir)
+            if not outdir_path.is_absolute():
+                outdir_path = Path.cwd() / outdir_path
+            outdir_path = outdir_path.resolve()
             outdir_path.mkdir(parents=True, exist_ok=True)
             
             # Handle file upload
@@ -215,13 +218,13 @@ def index():
                 )
             
             # Save uploaded file to temporary location
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.azw3') as tmp_input:
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.azw3', dir='/tmp') as tmp_input:
                 file.save(tmp_input.name)
                 bookpath = Path(tmp_input.name)
             
             try:
                 # Create temporary output directory for KindleUnpack
-                temp_outdir = Path(tempfile.mkdtemp())
+                temp_outdir = Path(tempfile.mkdtemp(dir='/tmp'))
                 
                 # Run KindleUnpack
                 app.logger.info(f"Converting {bookpath} using KindleUnpack...")
@@ -231,6 +234,7 @@ def index():
                 unpack_dir.mkdir(parents=True)
                 
                 cmd = [
+                    'python3',
                     KINDLEUNPACK_PATH,
                     '--epub_version=2',
                     str(bookpath),
@@ -274,15 +278,11 @@ def index():
                 
                 app.logger.info(f"Successfully converted to {dest_epub}")
                 
-                # Determine relative path for download
-                try:
-                    relative_path = dest_epub.relative_to(Path.cwd())
-                except ValueError:
-                    relative_path = dest_epub
+                # Determine download path
+                download_path = f"/download/{dest_epub.name}"
                 
                 message = f"✅ Successfully converted!<br>📁 Saved to: <code>{dest_epub}</code>"
                 message_type = "success"
-                download_path = f"/download/{relative_path}"
                 
             finally:
                 # Clean up temporary files
@@ -312,13 +312,16 @@ def index():
 def download_file(filename):
     """Serve the converted EPUB file"""
     try:
-        file_path = Path(filename)
+        # Get the output directory from the request or use default
+        outdir = request.args.get('dir', '/tmp/converted')
+        outdir_path = Path(outdir)
+        if not outdir_path.is_absolute():
+            outdir_path = Path.cwd() / outdir_path
+        outdir_path = outdir_path.resolve()
+        
+        file_path = outdir_path / Path(filename).name
         if not file_path.exists():
             return "File not found", 404
-        
-        # Security: ensure file is within current directory
-        if not str(file_path.resolve()).startswith(str(Path.cwd().resolve())):
-            return "Access denied", 403
         
         directory = str(file_path.parent)
         return send_from_directory(directory, file_path.name, as_attachment=True)
