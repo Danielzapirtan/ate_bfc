@@ -98,7 +98,7 @@ KINDLEUNPACK_PATH = None
 
 def download_kindleunpack():
     """Download KindleUnpack from GitHub as ZIP"""
-    repo_path = Path('/tmp/KindleUnpack')
+    repo_path = Path('KindleUnpack')
     
     if repo_path.exists():
         # Check if kindleunpack.py exists
@@ -179,9 +179,9 @@ def index():
     if request.method == 'POST':
         try:
             # Get output directory
-            #outdir = request.form.get('outdir', './converted').strip()
-            #if not outdir:
-            outdir = '/tmp/converted'
+            outdir = request.form.get('outdir', './converted').strip()
+            if not outdir:
+                outdir = './converted'
             
             # Create output directory
             outdir_path = Path(outdir).resolve()
@@ -338,10 +338,10 @@ if __name__ == '__main__':
     try:
         ensure_kindleunpack()
         print("✅ KindleUnpack initialized successfully")
-        print("🌐 Starting Flask server at http://localhost:5010")
+        print("🌐 Starting Flask server at http://localhost:5000")
     except Exception as e:
         print(f"❌ Failed to initialize KindleUnpack: {e}")
         print("Please ensure you have internet connection")
         exit(1)
     
-    app.run(debug=True, host='0.0.0.0', port=5010)
+    app.run(debug=True, host='0.0.0.0', port=5000)
